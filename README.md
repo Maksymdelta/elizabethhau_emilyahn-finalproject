@@ -22,18 +22,25 @@ Elizabeth Hau & Emily Ahn
 
 - You should aim to have *some* results by the update. Describe them.
     
-    We tried running pocketsphinx on the .raw files provided, .wav files we recorded ourselves, and .raw files converted from our .wav files. The transcriptions from the .raw files provided were fairly accurate, but this is not the case for our .wav files or .raw files.
+    We tried running pocketsphinx on the .raw files provided, .wav files we recorded ourselves, and .raw files converted from our .wav files. The transcriptions from the .raw files provided were fairly accurate, but this is not the case for our .wav files or .raw files. For example, in `seashells.wav`, Emily said `She sells seashells on the seashore` but the transcript we get back is the following:     
+    `['<s>', 'sneaker', 'or', '<sil>', 'the(2)', 'shares', 'on', '<sil>', 'your(2)', 'own', '</s>']`. 
+
+    Even when we convert `seashells.wav` to `seashells.raw`, the same transcript is returned. We also tried running pocketsphinx on a 20 second phone call `FAR00083.wav`. The outputted result is: `['<s>', 'up', '<sil>', 'on', '<sil>', 'that', '<sil>', '<sil>', 'one(2)', '<sil>', 'top(2)', '<sil>', 'that(2)', '<sil>', '<sil>', 'i', 'cannot', 'cut', 'out', 'all', 'right', '<sil>', 'but', 'pot', 'her', 'to(2)', '<sil>', 'but', '<sil>', '<sil>', 'the(2)', 'man', 'on', 'a', 'pole', '</s>']` whereas the actual transcription is `well let's see this is gonna be a little bit easier here i work as a computer consultant with a company called kpmg peat marwick and i've been there for about two and a half years now that's gone pretty well i'm thinking about doing some different things like getting into the multimedia area and let's see`.
 
 
 - Are the results satisfactory? If they aren't, what do you plan to modify/add?
-
     
-
-- Updates to your project plan, like goals and techniques that have changed since your proposal.
+    No, the results were not satisfactory. 
     1. research file formats and what sphinx needs
     2. try pocketsphinx on .mp3 files
     3. modify the acoustic model to keep filler words
 
+- Updates to your project plan, like goals and techniques that have changed since your proposal.
+    
+    The overall idea of the project has not changed. However, we did not anticipate to get such poor results from querying the sound files that we have created. Especially considering we will be providing most of our own sound files while running the system, our focus right now is to make sure we get a decent transcription when we provide an audio file to pocketsphinx.
+
 - Difficulties or questions that I can help you with. If you're having code-related problems, note the file name and line numbers.
+
+    Sound file conversions and file compressions-- is there something we are missing when we're either creating or converting our files that is causing the bad transcriptions?
 
 
