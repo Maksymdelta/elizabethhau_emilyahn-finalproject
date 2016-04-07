@@ -11,13 +11,14 @@ Elizabeth Hau & Emily Ahn
 - Did you meet your first milestone? Did you change your milestone?
 
   1. Achieve successful queries into Pocketsphinx? **YES**
-  2. Acquire a batch of gold standard audio files? 10 files for 20 mins each
+  2. Acquire a batch of gold standard audio files? 10 files for 20 mins each **YES**
     
     No we did not change our milestone.
 
 - What have you finished so far? Include background reading, development, brainstorming, and results.
 
     We were able to successfully query pocketsphinx, pass in an audio file, and get the best hypotheses (transcription). Along the way, we had a lot of trouble working with the Decoder class and knowing what methods are available pocketsphinx in python. Ultimately, even though queries were successful, we had issues getting accurate (recognizable) transcriptions from audio files that we created. Our hypthesis for the poor transcriptions is that the sound quality of the files gets lost in the conversion between .wav and .raw files or that our sound files are not in the correct audio format.
+    We have also compiled and downloaded 10 TED talks from a variety of topics, 5 from women and 5 from men. Each TED talk ranges from 10 to 20 minutes in length, and has been downloaded in .mp3 form. These sound files sit in our shared Google drive folder.
 
 
 - You should aim to have *some* results by the update. Describe them.
