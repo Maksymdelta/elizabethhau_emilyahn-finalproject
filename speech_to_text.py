@@ -39,9 +39,11 @@ decoder.start_utt()
 
 # different audio files to test
 #stream = open('FAR00083.wav', 'rb')
-stream = open('filler_words.wav', 'rb')
+#stream = open('filler_words.wav', 'rb')
 #stream = open('common_sents.wav', 'rb')
+
 #stream = open(path.join(DATADIR, 'numbers.raw'), 'rb')
+stream = open('/home/sravana/data/cslu_fae_corpus/eahn-hhau/09-educate.mp3','rb')
 while True:
     buf = stream.read(1024)
     if buf:
