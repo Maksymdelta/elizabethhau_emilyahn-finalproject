@@ -1,9 +1,13 @@
 #import audiotools as at
 from pocketsphinx.pocketsphinx import *
 from os import environ, path
+import sys
 
 MODELDIR = "/home/sravana/applications/pocketsphinx-python/pocketsphinx/model"
 DATADIR = "/home/sravana/applications/pocketsphinx-python/pocketsphinx/test/data"
+
+filename = sys.argv[1]
+
 #E.g:
 #http://www.repository.voxforge1.org/downloads/Main/Trunk/AcousticModels/Sphinx/voxforge-en-r0_1_3.tar.gz
 #hmmd = '/<your_path>/models/voxforge-en-r0_1_3/model_parameters/voxforge_en_sphinx.cd_cont_3000'
@@ -43,7 +47,7 @@ decoder.start_utt()
 #stream = open('common_sents.wav', 'rb')
 
 #stream = open(path.join(DATADIR, 'numbers.raw'), 'rb')
-stream = open('/home/sravana/data/cslu_fae_corpus/eahn-hhau/09-educate.mp3','rb')
+stream = open(path.join('/home/sravana/data/cslu_fae_corpus/eahn-hhau',filename),'rb')
 while True:
     buf = stream.read(1024)
     if buf:
