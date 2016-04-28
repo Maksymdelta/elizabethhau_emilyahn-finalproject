@@ -2,21 +2,13 @@
 from pocketsphinx.pocketsphinx import *
 from os import environ, path
 import sys
+import time
 
 MODELDIR = "/home/sravana/applications/pocketsphinx-python/pocketsphinx/model"
 DATADIR = "/home/sravana/applications/pocketsphinx-python/pocketsphinx/test/data"
 
-filename = sys.argv[1]
-
-#E.g:
-#http://www.repository.voxforge1.org/downloads/Main/Trunk/AcousticModels/Sphinx/voxforge-en-r0_1_3.tar.gz
-#hmmd = '/<your_path>/models/voxforge-en-r0_1_3/model_parameters/voxforge_en_sphinx.cd_cont_3000'
 hmmd = '/home/sravana/applications/pocketsphinx-python/pocketsphinx/model/en-us/en-us'
-# http://sourceforge.net/projects/cmusphinx/files/Acoustic and Language Models/US English HUB4 Language Model/HUB4_trigram_lm.zip
-#lmd = '/<your_path>/models/language_model.arpaformat.DMP'
 lmd = '/home/sravana/applications/pocketsphinx-python/pocketsphinx/model/en-us/en-us.lm.bin'
-# http://downloads.sourceforge.net/project/cmusphinx/Acoustic and Language Models/US English HUB4 Language Model/cmudict.hub4.06d.dict.zip
-#dictd = '/<your_path>/models/cmudict.hub4.06d.dict'
 dictd = '/home/sravana/applications/pocketsphinx-python/pocketsphinx/model/en-us/cmudict-en-us.dict'
 
 # create a decoder
@@ -25,82 +17,72 @@ config.set_string('-hmm', path.join(MODELDIR, 'en-us/en-us'))
 config.set_string('-lm', path.join(MODELDIR, 'en-us/en-us.lm.bin'))
 config.set_string('-dict', path.join(MODELDIR, 'en-us/cmudict-en-us.dict'))
 
-#decoder = Decoder(config)
-#make sure that your audio file has a wav format, sample format 16 bit PCM mono 
-#wavFile = open('seashells.raw', 'rb')
-#wavFile.seek(44)
-'''
-speechRec.decode_raw(wavFile)
-result = speechRec.get_hyp()
-print type(result)
-print 'result is', result
-
-print result[0]
-'''
-# Decode streaming data.
-decoder = Decoder(config)
-decoder.start_utt()
-
-# different audio files to test
-#stream = open('FAR00083.wav', 'rb')
-#stream = open('filler_words.wav', 'rb')
-#stream = open('common_sents.wav', 'rb')
-
-#stream = open(path.join(DATADIR, 'numbers.raw'), 'rb')
-stream = open(path.join('/home/sravana/data/cslu_fae_corpus/eahn-hhau',filename),'rb')
-while True:
-    buf = stream.read(1024)
-    if buf:
-        decoder.process_raw(buf, False, False)
-    else:
-        break
-decoder.end_utt()
-print ('Best hypothesis segments: ', [seg.word for seg in decoder.seg()])
-
-#actual for FR file
-#actual = "well let\'s see this is gonna be a little bit easier here i work as a computer consultant with a company called kpmg peat marwick and i\'ve been there for about two and a half years now that\'s gone pretty well i\'m thinking about doing some different things like getting into the multimedia area and let\'s see"
-
-#actual for common sents
-#actual = "she bought a skirt for him to wear to the party I want something hot to drink she is very busy he can be counted on I don\'t want to fail my exams"
-actual = "um I want something hot to drink so I went to a coffee shop and ordered um hot coffee and hot chocolate then i felt better"
-actual_list = actual.split()
-
-print 'Actual:', actual_list
-''' *************** DISCOVERY SO FAR 4/14/2016 ***************************
-    The filler words seem to be marked as [SPEECH] in the hypothesis
-    *********************************************************************
-'''
-'''
-decoder.start_utt()
-stream = wavFile
-while True:
-    buf = stream.read(1024)
-
-    if buf:
- #       print '\nbuf was true'
-        decoder.process_raw(buf, False, False)
-    else:
-        break
+def write_hypothesis(outfile, segments):
+    # writes the hypothesis file and calculates accuracy
+    with open(outfile, 'w') as o:
+        for word in segments:       
+            o.write(word+' ')  
+    o.close()  
+    
+def decode(datadir, filename):
+    # Decode streaming data.
+    decoder = Decoder(config)
+    decoder.start_utt()
+    
+    # different audio files to test
+    #stream = open('FAR00083.wav', 'rb')
+    #stream = open('filler_words.wav', 'rb')
+    #stream = open('common_sents.wav', 'rb')
+    #datadir = '/home/sravana/data/cslu_fae_corpus/eahn-hhau'
+    #stream = open(path.join(DATADIR, 'numbers.raw'), 'rb')
+    stream = open(path.join(datadir,filename),'rb')
+    
+    while True:
+        buf = stream.read(1024)
+        if buf:
+            decoder.process_raw(buf, False, False)
+        else:
+            break
     decoder.end_utt()
-    hypothesis = decoder.hyp()
-  #  print type(hypothesis)
-   # print hypothesis
-    logmath = decoder.get_logmath()
-    print ('Best hypothesis: ', hypothesis.hypstr, " model score: ", hypothesis.best_score, " confidence: ", logmath.exp(hypothesis.prob))
-
+    segments = [seg.word for seg in decoder.seg()]
+    f = 'hypothesis-'+filename.split('.')[0]+'.txt'
     print ('Best hypothesis segments: ', [seg.word for seg in decoder.seg()])
+    write_hypothesis(f, segments)
+    return segments
+    
 
-# Access N best decodings.
-print ('Best 10 hypothesis: ')
-for best, i in zip(decoder.nbest(), range(10)):
-        print (best.hypstr, best.score)
-
-        stream = open(path.join(DATADIR, 'goforward.mfc'), 'rb')
-        stream.read(4)
-        buf = stream.read(13780)
-        decoder.start_utt()
-        decoder.process_cep(buf, False, True)
-        decoder.end_utt()
-        hypothesis = decoder.hyp()
-        print ('Best hypothesis: ', hypothesis.hypstr, " model score: ", hypothesis.best_score, " confidence: ", hypothesis.prob)
-'''
+    ''' *************** DISCOVERY SO FAR 4/14/2016 ***************************
+        The filler words seem to be marked as [SPEECH] in the hypothesis
+        *********************************************************************
+    '''
+    
+if __name__=='__main__':
+    #parser = argparse.ArgumentParser()
+    #parser.add_argument("datadir", help="directory where dataset is located", type=str)
+    #parser.add_argument("filename", help="n for n-gram model", type=str)
+    ##parser.add_argument("unit", help="word or character level model?", type=str, choices=['word', 'character'])
+    ##parser.add_argument("lam", help="linear interpolation scaling factor between 0 and 1", type=float)
+    #args = parser.parse_args()
+    
+    #print '\n\n***********************************************'
+    #print '\ndata directory=', args.datadir, 'filename:', args.filename
+    datadir = ""
+    global filename
+    start = time.time()
+    # if one argument provided, it's the filename and assume the data directory is the current directory
+    if len(sys.argv)== 2:
+        filename = sys.argv[1]
+        decode(datadir, filename)
+    elif len(sys.argv)==3:
+        # if two arguments provided, the first argument will be the data directory and the second the filename
+        datadir = sys.argv[1]
+        filename = sys.argv[2]
+        decode(datadir, filename)
+    else:
+        # if no args provided, ask for a filename and assume the datadir is the current directory
+        f = raw_input('Enter a filename: ')
+        decode(datadir, f)
+        
+    
+    end = time.time()
+    print 'time elapsed:', (end - start)
