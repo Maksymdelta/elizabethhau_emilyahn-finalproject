@@ -1,11 +1,12 @@
 #import audiotools as at
 from pocketsphinx.pocketsphinx import *
-from os import environ, path
+from os import environ, path, listdir
 import sys
 import time
+__author__ = 'Emily Ahn and Elizabeth Hau'
 
 MODELDIR = "/home/sravana/applications/pocketsphinx-python/pocketsphinx/model"
-DATADIR = "/home/sravana/applications/pocketsphinx-python/pocketsphinx/test/data"
+DATADIR = "/home/sravana/data/cslu_fae_corpus/cs349"
 
 hmmd = '/home/sravana/applications/pocketsphinx-python/pocketsphinx/model/en-us/en-us'
 lmd = '/home/sravana/applications/pocketsphinx-python/pocketsphinx/model/en-us/en-us.lm.bin'
@@ -66,22 +67,33 @@ if __name__=='__main__':
     
     #print '\n\n***********************************************'
     #print '\ndata directory=', args.datadir, 'filename:', args.filename
-    datadir = ""
+    
+    #datadir = "/home/sravana/data/cslu_fae_corpus/cs349"
+    
     global filename
     start = time.time()
-    # if one argument provided, it's the filename and assume the data directory is the current directory
+    # if one argument provided, it's a filename or a directory
+    # and assume the data directory is the default data directory
     if len(sys.argv)== 2:
+        #if ".wav" in sys.argv[1]:
         filename = sys.argv[1]
-        decode(datadir, filename)
+        decode(DATADIR, filename)
+        #else: # directory name provided, decode every file in the data directory
+        #    for f in os.listdir(DATADIR):
+        #        if not f.startswith('.') and os.path.isfile(os.path.join(DATADIR, f)):
+        #            decode(DATADIR, f)
     elif len(sys.argv)==3:
         # if two arguments provided, the first argument will be the data directory and the second the filename
         datadir = sys.argv[1]
         filename = sys.argv[2]
         decode(datadir, filename)
     else:
-        # if no args provided, ask for a filename and assume the datadir is the current directory
-        f = raw_input('Enter a filename: ')
-        decode(datadir, f)
+        # if no args provided, ask for a filename and assume the datadir is the default data directory
+        #f = raw_input('Enter a filename: ')
+        #decode(DATADIR, f)
+        for f in listdir(DATADIR):
+            if not f.startswith('.') and path.isfile(path.join(DATADIR, f)):
+                decode(DATADIR, f)
         
     
     end = time.time()
