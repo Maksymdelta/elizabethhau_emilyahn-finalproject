@@ -1,0 +1,57 @@
+from __future__ import division
+import sys
+import os
+
+__author__ = 'Emily Ahn and Elizabeth Hau'
+
+def read_file(filename):
+    """ Takes in a file name and reads it in as a list of words """
+    with open(filename, 'r') as f:
+        return f.read().split()
+        
+def preprocess_segments(segments):
+    """ Preprocesses the segments to remove numbers after words, <sil>, <s>, </s>,
+        [NOISE] and return a new list with the cleaned up data
+    """
+    new_list = []
+    for word in segments:
+        if not (word == '<sil>' or word == '<s>' or word == '</s>' or word == '[NOISE]'):
+            if "(" in word:
+                new_list.append(word.split("(")[0])
+            else:
+                new_list.append(word)
+    return new_list
+
+def filler_words(segments, filler='[SPEECH]'):
+    """ Takes in a filler word to search for and a list of the hypothesis 
+        segments and returns the % of the filler word's occurence . 
+        The filler word parameter is optional, the default filler word to
+        search for is 'um'
+    """
+    new_list = []
+    if not filler == '[SPEECH]':
+        filler = filler.lower()
+    for word in segments:
+        if "(" in word:
+            new_list.append(word.split("(")[0])
+        else:
+            new_list.append(word)
+    num_filler = new_list.count(filler)
+    assert len(new_list) == len(segments)
+    total_words = len(new_list)
+    print 'num ', filler,':', num_filler
+    print 'total_words:', total_words
+    return num_filler/total_words
+    
+if __name__=='__main__':
+    DATADIR = sys.argv[1]
+    for f in os.listdir(DATADIR):
+        if not f.startswith('.') and os.path.isfile(os.path.join(DATADIR, f)):
+            print 'file is:', f
+            filename = os.path.join(DATADIR, f)
+            read = read_file(filename)
+            preprocessed = preprocess_segments(read)
+            print '*********** FILE: ', f, '****************'
+            filler_words(preprocessed)
+            filler_words(preprocessed, 'like')
+            filler_words(read, '<sil>')
