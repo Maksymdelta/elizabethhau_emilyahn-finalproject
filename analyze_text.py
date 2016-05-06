@@ -41,8 +41,17 @@ def filler_words(segments, filler='[SPEECH]'):
     total_words = len(new_list)
     print 'total_words:', total_words
     print 'number of ', filler,'said:', num_filler
-    return num_filler/total_words
+    percent = num_filler/total_words
+    print 'percent of filler words', percent
+    print 'compared to TED standard (0.005589%)', compare_to_standard(percent, 0.005589)
+    return percent
     
+def compare_to_standard(percent, standard):
+    if percent < standard:
+        print 'GOOD JOB. You don\'t use many filler words.'
+    else:
+        print 'Keep practicing! You still use too many filler words'
+
 if __name__=='__main__':
     DATADIR = sys.argv[1]
     for f in os.listdir(DATADIR):
