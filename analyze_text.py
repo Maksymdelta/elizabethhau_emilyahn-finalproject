@@ -39,8 +39,8 @@ def filler_words(segments, filler='[SPEECH]'):
     num_filler = new_list.count(filler)
     assert len(new_list) == len(segments)
     total_words = len(new_list)
-    print 'num ', filler,':', num_filler
     print 'total_words:', total_words
+    print 'number of ', filler,'said:', num_filler
     return num_filler/total_words
     
 if __name__=='__main__':
@@ -52,6 +52,9 @@ if __name__=='__main__':
             read = read_file(filename)
             preprocessed = preprocess_segments(read)
             print '*********** FILE: ', f, '****************'
-            filler_words(preprocessed)
-            filler_words(preprocessed, 'like')
-            filler_words(read, '<sil>')
+            ums = filler_words(preprocessed)
+            likes = filler_words(preprocessed, 'like')
+            silences = filler_words(read, '<sil>')
+            print '% of "um"s said ([\'SPEECH\'])', ums
+            print '% of "like"s said', likes
+            print '% of "<sil>"', silences
