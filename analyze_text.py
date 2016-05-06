@@ -43,7 +43,8 @@ def filler_words(segments, filler='[SPEECH]'):
     print 'number of ', filler,'said:', num_filler
     percent = num_filler/total_words
     print 'percent of filler words', percent
-    print 'compared to TED standard (0.005589%)', compare_to_standard(percent, 0.005589)
+    print 'compared to TED standard frequency of filler words (0.005589%)...'
+    compare_to_standard(percent, 0.005589)
     return percent
     
 def compare_to_standard(percent, standard):
