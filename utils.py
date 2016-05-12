@@ -5,10 +5,20 @@ import select
 import sys
 import pyaudio
 import wave
+import os
 
-''' sources: 
+__author__ = 'Emily Ahn and Elizabeth Hau'
+
+''' *************************** utils.py ******************************
+    This file allows users to record themselves using the microphone of
+    their local computer and saves the recorded file as 'demo.wav' in 
+    the data directory. Recording starts right after running the script
+    and stops either if the user hits the 'Enter' key or is silent for 
+    a long period of time (i.e. if continuous silence time > SILENT_THRESHOLD)
+    sources: 
     1. http://stackoverflow.com/questions/892199/detect-record-audio-in-python
     2. http://stackoverflow.com/questions/292095/polling-the-keyboard-detect-a-keypress-in-python
+    *******************************************************************
 '''
 
 THRESHOLD = 300 # threshold for when to "tag" something as silent
@@ -16,6 +26,7 @@ SILENT_THRESHOLD = 30 # threshold for when to stop recording
 CHUNK_SIZE = 1024
 FORMAT = pyaudio.paInt16
 RATE = 16000 # sampling rate
+DATADIR = "data"
 
 def heardEnter():
     "Returns 'True' if the 'Enter' key is pressed"
@@ -127,7 +138,6 @@ def record():
         if heardEnter():
             break
             
-
     sample_width = p.get_sample_size(FORMAT)
     stream.stop_stream()
     stream.close()
@@ -152,5 +162,5 @@ def record_to_file(path):
 
 if __name__ == '__main__':
     print("*** please speak into the microphone ***\n")
-    record_to_file('demo.wav')
-    print("\n*** done - result written to demo.wav ***")
+    record_to_file(os.path.join('demo.wav'))
+    print("\n*** done - result written to demo.wav in the data directory ***")
