@@ -20,7 +20,7 @@ __author__ = 'Emily Ahn and Elizabeth Hau'
 # directory paths
 MODELDIR = "/home/sravana/applications/pocketsphinx-python/pocketsphinx/model"
 GOLD_DATADIR = "/home/sravana/data/cslu_fae_corpus/cs349" # gold standard wav files
-DATADIR = "data"
+DATADIR = "data" #wav files
 HYPDIR = "data/hyp_test" # stores test hypotheses
 
 # paths to dictionaries
@@ -87,9 +87,10 @@ if __name__=='__main__':
     # if one argument provided, it's a filename 
     # and assume the data directory is the default data directory
         filename = sys.argv[1]
-        if file_in_correct_format(filename):
+        if file_in_correct_format(path.join(DATADIR, filename)):
             segments = decode(DATADIR, filename)
             new_list = preprocess_segments(segments)
+            print '\n************* RESULTS ****************'
             filler_words(new_list)
         
     elif len(sys.argv)==3:
@@ -97,15 +98,16 @@ if __name__=='__main__':
         datadir = sys.argv[1]
         filename = sys.argv[2]
         
-        if file_in_correct_format(filename):
+        if file_in_correct_format(path.join(datadir, filename)):
             segments = decode(datadir, filename)
             new_list = preprocess_segments(segments)
+            print '\n************* RESULTS ****************'
             filler_words(new_list)
     else:
         # if no args provided, run the decoder on all files in the default DATADIR
         for f in listdir(DATADIR):
             if not f.startswith('.') and path.isfile(path.join(DATADIR, f)):
-                if file_in_correct_format(f):
+                if file_in_correct_format(path.join(DATADIR, f)):
                     decode(DATADIR, f)
     end = time.time()
     print 'time elapsed:', (end - start)

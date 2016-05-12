@@ -25,7 +25,7 @@ def preprocess_segments(segments):
         [NOISE] and return a new list with the cleaned up data
         i.e. new list returned will only contain the words spoken 
     '''
-    new_list = [] # contains everything in the hypothesis segments excluding numbers after words (e.g. word(2) --> word)
+    new_list = [] 
     for word in segments:
         if not (word == '<sil>' or word == '<s>' or word == '</s>' or word == '[NOISE]'):
             if "(" in word:
@@ -35,23 +35,17 @@ def preprocess_segments(segments):
     return new_list
 
 def filler_words(segments, filler='[SPEECH]'):
-    ''' Takes in a list of the hypoethesis segments and an optional parameter as 
+    ''' Takes in a list of the hypothesis segments and an optional parameter as 
         the filler word to search for and returns the % of the filler word's
         occurrence. The default filler word to search for is 'um' or 'uh', 
         represented as "[SPEECH]" in the hypothesis files. 
         This function assumes that the segments passed in is already cleaned up
         (only contains words spoken, no <s>, </s>, <sil>, or [NOISE])
     '''
-    #new_list = [] # containing the list of words spoken
     if not filler == '[SPEECH]':
         filler = filler.lower()
-    #for word in segments:
-    #    if "(" in word:
-    #        new_list.append(word.split("(")[0])
-    #    else:
-    #        new_list.append(word)
+        
     num_filler = segments.count(filler)
-    #assert len(new_list) == len(segments)
     total_words = len(segments)
     print 'total_words:', total_words
     print 'number of ', filler,'said:', num_filler
@@ -77,8 +71,8 @@ if __name__=='__main__':
         if not f.startswith('.') and os.path.isfile(os.path.join(DATADIR, f)):
             print 'file is:', f
             filename = os.path.join(DATADIR, f)
-            read = read_file(filename)
-            preprocessed = preprocess_segments(read)
+            read = read_file(filename) # original segments
+            preprocessed = preprocess_segments(read) # only spoken words
             print '\n*********** FILE: ', f, '****************'
             ums = filler_words(preprocessed)
             #likes = filler_words(preprocessed, 'like') #<-- inaccurate
