@@ -4,7 +4,9 @@
 
 ####Elizabeth Hau & Emily Ahn
 
-This is a program that would analyze a given speech and count the number of filler words used, provided the filler words the program should look for in the speech. The goal of this project is to provide a tool for people to receive feedback on their speeches and help them when they practice public speaking. 
+### Goal & Motivation
+Public speaking can be challenging and nerve-wracking, but having good speaking skills for giving presentations and disseminating ideas is both essential and practical. People often unknowingly use filler words such as “umm”, “uhh”, or “like” while giving presentations, and it would be good to make them more aware of how often they use these words. This is a program that would analyze a given speech and count the number of filler words used, provided the filler words the program should look for in the speech. The goal of this project is to build a tool that could provide feedback to people as they try to improve their public speaking skills. 
+
 
 ### The files
 - `utils.py`: Allows users to record themselves using the microphone of their local computer and saves the recorded file as 'demo.wav' in the data directory. 
@@ -12,7 +14,9 @@ This is a program that would analyze a given speech and count the number of fill
 - `analyze_text.py`: Assuming we already have the transcriptions, read the hypotheses, process it and report the results.
 
 ### Data
-- TED talks: 10 TED talks, ~20 minutes each, 5 male, 5 female, varying age, gender, and topic
+- `data/`: recordings of our own speech to test the system + 2 directories: `hyp_ted` and `hyp_test`
+- `data/hyp_ted`: TED talks: transcriptions of 10 TED talks, ~20 minutes each, 5 male, 5 female, varying age, gender, and topic
+- `data/hyp_test`: transcriptions of recordings of our own speech
 
 ## To run the program
 
