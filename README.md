@@ -1,47 +1,94 @@
 # Public Speaking Feedback Tool
 
-Wellesley cs349 Final Project
-
-Spring 2016
+Wellesley cs349 Natural Language Processing - Final Project (Spring 2016)
 
 Elizabeth Hau & Emily Ahn
 
-## Project Update 4/4
+This is a program that would analyze a given speech and count the number of filler words used, provided the filler words the program should look for in the speech. The goal of this project is to provide a tool for people to receive feedback on their speeches and help them when they practice public speaking. 
 
-- Did you meet your first milestone? Did you change your milestone?
+### The files
+- `utils.py`: Allows users to record themselves using the microphone of their local computer and saves the recorded file as 'demo.wav' in the data directory. 
+- `speech_to_text.py`: Given an audio file, runs the CMUSphinx decoder, which generates transcriptions for the files and writes the hypotheses to a file in the `data/hyp_test` directory. If run in single file mode, also compares the transcription with the gold standard and displays a short message to the user.
+- `analyze_text.py`: Assuming we already have the transcriptions, read the hypotheses, process it and report the results.
 
-  1. Achieve successful queries into Pocketsphinx? **YES**
-  2. Acquire a batch of gold standard audio files? 10 files for 20 mins each **YES**
+### Data
+- TED talks: 10 TED talks, ~20 minutes each, 5 male, 5 female, varying age, gender, and topic
+
+## To run the program
+
+1. **Create an audio file**
+  
+    (can skip this step if already have a 16000 Hz mono-channel file)
+
+  Running `utils.py` will start recording your speech using your local computer's microphone. Recording stops either when the user hits the 'Enter' key or has been silent for a long period of time (i.e. if continuous silence time > SILENT_THRESHOLD)
+    <blockquote>
+        python utils.py
+  </blockquote>
+  The recording should be saved as `demo.wav` in the `data` directory
+  
+2. **Obtain transcriptions**
+  
+  Run `speech_to_text.py` with one of the following commands:
     
-    No we did not change our milestone.
+    1. Batch mode: 
+      
+        <blockquote>`python speech_to_text.py` </blockquote>
+        runs the decoder on all files in the default data directory (ignoring directories such as `hyp_ted` and `hyp_test`) and throws an error if a file is not in correct format (e.g. there is a text file in `data/`)
+    2. Single file mode: 
+        
+        <blockquote>`python speech_to_text.py filename`</blockquote> assumes the file name provided is in the default data directory and
 
-- What have you finished so far? Include background reading, development, brainstorming, and results.
-
-    We were able to successfully query pocketsphinx, pass in an audio file, and get the best hypotheses (transcription). Along the way, we had a lot of trouble working with the Decoder class and knowing what methods are available pocketsphinx in python. Ultimately, even though queries were successful, we had issues getting accurate (recognizable) transcriptions from audio files that we created. Our hypthesis for the poor transcriptions is that the sound quality of the files gets lost in the conversion between .wav and .raw files or that our sound files are not in the correct audio format.
-    We have also compiled and downloaded 10 TED talks from a variety of topics, 5 from women and 5 from men. Each TED talk ranges from 10 to 20 minutes in length, and has been downloaded in .mp3 form. These sound files sit in our shared Google drive folder.
-
-
-- You should aim to have *some* results by the update. Describe them.
+        <blockquote>`python speech_to_text.py datadir filename`</blockquote> assumes the first argument is the data directory and the second is the file name
     
-    We tried running pocketsphinx on the .raw files provided, .wav files we recorded ourselves, and .raw files converted from our .wav files. The transcriptions from the .raw files provided were fairly accurate, but this is not the case for our .wav files or .raw files. For example, in `seashells.wav`, Emily said `She sells seashells on the seashore` but the transcript we get back is the following:     
-    `['<s>', 'sneaker', 'or', '<sil>', 'the(2)', 'shares', 'on', '<sil>', 'your(2)', 'own', '</s>']`. 
-
-    Even when we convert `seashells.wav` to `seashells.raw`, the same transcript is returned. We also tried running pocketsphinx on a 20 second phone call `FAR00083.wav`. The outputted result is: `['<s>', 'up', '<sil>', 'on', '<sil>', 'that', '<sil>', '<sil>', 'one(2)', '<sil>', 'top(2)', '<sil>', 'that(2)', '<sil>', '<sil>', 'i', 'cannot', 'cut', 'out', 'all', 'right', '<sil>', 'but', 'pot', 'her', 'to(2)', '<sil>', 'but', '<sil>', '<sil>', 'the(2)', 'man', 'on', 'a', 'pole', '</s>']` whereas the actual transcription is `well let's see this is gonna be a little bit easier here i work as a computer consultant with a company called kpmg peat marwick and i've been there for about two and a half years now that's gone pretty well i'm thinking about doing some different things like getting into the multimedia area and let's see`.
-
-
-- Are the results satisfactory? If they aren't, what do you plan to modify/add?
+  Running `speech_to_text.py` gets the transcriptions of the files and stores them in `data/hyp_test`. If ran in single mode, `speech_to_text.py` also reports the number and percentage of filler words said in the speech, compares it with the gold standard, and displays a short message.
+  
+  The feedback on filler words upon running `speech_to_text.py` should be displayed in the terminal (only in single file mode) as follows
+   
+  ````
+    ************* RESULTS ****************
+    total_words: 53
+    number of  [SPEECH] said: 4
+    percent of filler words 0.0754716981132
+    compared to TED standard frequency of filler words (0.005589%)...
+    Keep practicing! You still use too many filler words
+    ````
     
-    No, the results were not satisfactory. 
-    1. research file formats and what sphinx needs
-    2. try pocketsphinx on .mp3 files
-    3. modify the acoustic model to keep filler words
 
-- Updates to your project plan, like goals and techniques that have changed since your proposal.
-    
-    The overall idea of the project has not changed. However, we did not anticipate to get such poor results from querying the sound files that we have created. Especially considering we will be providing most of our own sound files while running the system, our focus right now is to make sure we get a decent transcription when we provide an audio file to pocketsphinx.
+3. **Batch feedback**
 
-- Difficulties or questions that I can help you with. If you're having code-related problems, note the file name and line numbers.
-
-    Sound file conversions and file compressions-- is there something we are missing when we're either creating or converting our files that is causing the bad transcriptions?
-
-
+  If you already have the transcription(s) of the file(s), run <blockquote>`python analyze_text.py hypdir`</blockquote> to get feedback on all the hypotheses files in the directory containing all these files. This program also assumes that `hypdir` contains only text files that are the hypotheses (i.e. .txt files in the correct format). 
+  
+  An example feedback on some files displayed in the terminal: 
+  
+  ````
+  *********** FILE:  hypothesis-demo1.txt ****************
+  total_words: 53
+  number of  [SPEECH] said: 4
+  percent of filler words 0.0754716981132
+  compared to TED standard frequency of filler words (0.005589%)...
+  Keep practicing! You still use too many filler words
+  total_words: 73
+  number of  <sil> said: 18
+  percent of filler words 0.246575342466
+  compared to TED standard frequency of filler words (0.005589%)...
+  Keep practicing! You still use too many filler words
+  % of "um"s said (['SPEECH']) 0.0754716981132
+  % of "<sil>" 0.246575342466
+  file is: hypothesis-ar_1_16000.txt
+  
+  *********** FILE:  hypothesis-ar_1_16000.txt ****************
+  total_words: 48
+  number of  [SPEECH] said: 3
+  percent of filler words 0.0625
+  compared to TED standard frequency of filler words (0.005589%)...
+  Keep practicing! You still use too many filler words
+  total_words: 63
+  number of  <sil> said: 12
+  percent of filler words 0.190476190476
+  compared to TED standard frequency of filler words (0.005589%)...
+  Keep practicing! You still use too many filler words
+  % of "um"s said (['SPEECH']) 0.0625
+  % of "<sil>" 0.190476190476
+  file is: hypothesis-demo1_converted.txt
+  ````
+  
