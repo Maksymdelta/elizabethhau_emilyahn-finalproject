@@ -48,11 +48,13 @@ def filler_words(segments, filler='[SPEECH]'):
     num_filler = segments.count(filler)
     total_words = len(segments)
     print 'total_words:', total_words
+    if filler == '[SPEECH]':
+        filler = 'um or uh' # for better printing in the results
     print 'number of ', filler,'said:', num_filler
     percent = num_filler/total_words
     print 'percent of filler words', percent
     print 'compared to TED standard frequency of filler words (0.005589%)...'
-    compare_to_standard(percent, 0.005589)
+    compare_to_standard(percent, 0.005589) # gold standard is hard coded into the program right now
     return percent
     
 def compare_to_standard(percent, standard):
@@ -67,6 +69,7 @@ def compare_to_standard(percent, standard):
 
 if __name__=='__main__':
     DATADIR = sys.argv[1] #directory to read the hypothesis files from
+    # assumes the directory provided only contains text files of the hypotheses
     for f in os.listdir(DATADIR):
         if not f.startswith('.') and os.path.isfile(os.path.join(DATADIR, f)):
             print 'file is:', f

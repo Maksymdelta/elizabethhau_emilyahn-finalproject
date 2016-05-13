@@ -105,6 +105,8 @@ if __name__=='__main__':
             filler_words(new_list)
     else:
         # if no args provided, run the decoder on all files in the default DATADIR
+        # this assumes there are only .wav files in the directory (not including
+        # other directories. throws an error if 
         for f in listdir(DATADIR):
             if not f.startswith('.') and path.isfile(path.join(DATADIR, f)):
                 if file_in_correct_format(path.join(DATADIR, f)):
