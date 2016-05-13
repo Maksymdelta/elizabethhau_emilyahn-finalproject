@@ -1,8 +1,8 @@
 # Public Speaking Feedback Tool
 
-Wellesley cs349 Natural Language Processing - Final Project (Spring 2016)
+###Wellesley cs349 Natural Language Processing - Final Project (Spring 2016)
 
-Elizabeth Hau & Emily Ahn
+####Elizabeth Hau & Emily Ahn
 
 This is a program that would analyze a given speech and count the number of filler words used, provided the filler words the program should look for in the speech. The goal of this project is to provide a tool for people to receive feedback on their speeches and help them when they practice public speaking. 
 
