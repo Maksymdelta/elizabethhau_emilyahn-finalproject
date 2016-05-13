@@ -162,5 +162,5 @@ def record_to_file(path):
 
 if __name__ == '__main__':
     print("*** please speak into the microphone ***\n")
-    record_to_file(os.path.join('demo.wav'))
+    record_to_file(os.path.join(DATADIR,'demo.wav'))
     print("\n*** done - result written to demo.wav in the data directory ***")
