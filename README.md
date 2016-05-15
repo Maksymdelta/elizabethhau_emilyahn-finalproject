@@ -25,7 +25,7 @@ Public speaking can be challenging and nerve-wracking, but having good speaking 
   
     (can skip this step if already have a 16000 Hz mono-channel file)
 
-  Running `utils.py` will start recording your speech using your local computer's microphone. Recording stops either when the user hits the 'Enter' key or has been silent for a long period of time (i.e. if continuous silence time > SILENT_THRESHOLD)
+  Running `utils.py` will start recording your speech using your local computer's microphone. The recording stops either when the user hits the 'Enter' key or has been silent for a long period of time (i.e. if continuous silence time > SILENT_THRESHOLD)
     <blockquote>
         python utils.py
   </blockquote>
@@ -47,7 +47,7 @@ Public speaking can be challenging and nerve-wracking, but having good speaking 
     
   Running `speech_to_text.py` gets the transcriptions of the files and stores them in `data/hyp_test`. If ran in single mode, `speech_to_text.py` also reports the number and percentage of filler words said in the speech, compares it with the gold standard, and displays a short message.
   
-  The feedback on filler words upon running `speech_to_text.py` should be displayed in the terminal (only in single file mode) as follows
+  The feedback on filler words upon running `speech_to_text.py` should be displayed in the terminal (only in single file mode) as follows in this sample output.
    
   ````
     ************* RESULTS ****************
